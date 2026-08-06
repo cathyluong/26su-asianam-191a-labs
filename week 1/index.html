@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Cathy's Webdevelopment Extravangaza</title>
+    <meta charset="utf-8" />
+    <link rel="shortcut icon" href="#">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl/dist/maplibre-gl.css" />
+    <script src="https://unpkg.com/maplibre-gl@5.0.0/dist/maplibre-gl.js"></script>
+</head>
+<body>
+    <h1>Home</h1>
+  <main>
+            <div class="portfolio-title">
+                <h2>❥・・ ┈┈┈༚༅༚˳ . ୨୧ . ˳༚༅༚┈┈ ・・❥</h2>
+            </div>
+            <div class="portfolio">
+                <div class="about-me">
+                    <h3>About Me</h3>
+                    <div class="about-me-intro">
+                        <img class="profile-image" src="images/IMG_0008.JPG" alt="Cathy's Headshot">
+                        <div class="about-me-content">
+                            <p>Hi, my name is Cathy & this is my website for ASIAN AM 191A!</p>
+                            <p>In my free time, I enjoy petting any cute animals I see in the world or forcing my pets to cuddle with me. I recently became a cat mom after having a dog for the past 9 years.</p>
+                            <p>As a Biochemistry major with absolutely zero web-development or coding experience, I am highly motivated to learn and improve my skills as a critical digital mapper while maintaining my sanity and desire to make everything cute!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="map-description">
+                    <h3>Map Description</h3>
+                    <p>This map showcases some of my study spots around UCLA campus that I have been to throughout undergrad.
+                        My classes have always required lots of studying outside the classroom, especially since I struggled with procrastination, focus,
+                        and time-management, so majority of my time was spent with friends and BruinLearn open. I hope by sharing the opening hours, my personal insight, and my rating of each study spot,
+                        other students can benefit and have a new spot to explore! 
+                        </p>
+                </div>
+            </div>
+            <div id="map"></div>
+
+            <section class="social-and-lists" aria-label="instagram carousel and personal lists">
+                <h2 class="social-divider" aria-label="section divider">╔.·:*¨༺ ༻¨*:·.╗</h2>
+                <section class="insta-carousel" aria-labelledby="insta-carousel-title">
+                    <div class="carousel-heading">
+                        <p class="carousel-kicker">My Instagram</p>
+                        <h3 id="insta-carousel-title">A Glimpse of My Daily Life</h3>
+                    </div>
+
+                    <input type="radio" name="mock insta" id="spotlight-1" checked>
+                    <input type="radio" name="mock insta" id="spotlight-2">
+                    <input type="radio" name="mock insta" id="spotlight-3">
+                    <input type="radio" name="mock insta" id="spotlight-4">
+
+                    <div class="ig-stage" aria-label="Instagram post carousel">
+                        <label class="ig-card ig-card-1" for="spotlight-1">
+                            <span class="ig-meta">
+                                <span class="ig-avatar"></span>
+                                <span>
+                                    <span class="ig-handle">@cathynlg</span>
+                                    <span class="ig-location">cedars-sinai</span>
+                                </span>
+                            </span>
+                            <span class="ig-photo ig-photo-one ig-photo-media"><img src="images/IMG_2096_(copy).jpg" alt="scientist cathy"></span>
+                            <span class="ig-caption">me with my first ever cancer cells!</span>
+                        </label>
+
+                        <label class="ig-card ig-card-2" for="spotlight-2">
+                            <span class="ig-meta">
+                                <span class="ig-avatar"></span>
+                                <span>
+                                    <span class="ig-handle">@cathynlg</span>
+                                    <span class="ig-location">cathy's bathroom</span>
+                                </span>
+                            </span>
+                            <span class="ig-photo ig-photo-two ig-photo-media"><img src="images/IMG_6583_(copy).jpg" alt="a tuna in a sink"></span>
+                            <span class="ig-caption">my view every time i sit on the toilet.</span>
+                        </label>
+
+                        <label class="ig-card ig-card-3" for="spotlight-3">
+                            <span class="ig-meta">
+                                <span class="ig-avatar"></span>
+                                <span>
+                                    <span class="ig-handle">@cathynlg</span>
+                                    <span class="ig-location">yrl</span>
+                                </span>
+                            </span>
+                            <span class="ig-photo ig-photo-three ig-photo-media"><img src="images/IMG_5348_(copy).jpg" alt="study buddies"></span>
+                            <span class="ig-caption">study buddies locking in.</span>
+                        </label>
+
+                        <label class="ig-card ig-card-4" for="spotlight-4">
+                            <span class="ig-meta">
+                                <span class="ig-avatar"></span>
+                                <span>
+                                    <span class="ig-handle">@cathynlg</span>
+                                    <span class="ig-location">winnie & tuna's bed</span>
+                                </span>
+                            </span>
+                            <span class="ig-photo ig-photo-four ig-photo-media"><img src="images/IMG_0457.jpg" alt="winnie and tuna cuddle buddies"></span>
+                            <span class="ig-caption">cuddle buddles for life! (tuna hates winnie).</span>
+                        </label>
+                    </div>
+
+                    <div class="carousel-nav" aria-label="insta mock carousel navigation">
+                        <label for="spotlight-1">1</label>
+                        <label for="spotlight-2">2</label>
+                        <label for="spotlight-3">3</label>
+                        <label for="spotlight-4">4</label>
+                    </div>
+                </section>
+
+                <aside class="requirements-panel" aria-labelledby="requirements-title">
+                    <h3 id="requirements-title">Cute Corner: Fun + Favorites</h3>
+
+                    <h4>Things I Do For Fun</h4>
+                    <ul>
+                        <li>Watch <a href="https://www.youtube.com/@sydmac" target="_blank" rel="noopener noreferrer">@sydmac on YouTube</a></li>
+                        <li>Watch <a href="https://www.youtube.com/@KevinLangue2" target="_blank" rel="noopener noreferrer">@KevinLangue2 on YouTube</a></li>
+                        <li>Watch Lucky Scoop TikToks</li>
+                        <li>Play video games like Roblox, Valorant, The Sims 4, and Stardew Valley</li>
+                        <li>Scroll Pinterest</li>
+                        <li>Force my pets to cuddle with me</li>
+                    </ul>
+
+                    <h4>My Favorite Foods</h4>
+                    <ol>
+                        <li>Banh xeo</li>
+                        <li>Pork katsu</li>
+                        <li>Che thai</li>
+                        <li>Pad thai</li>
+                        <li>Hu tieu ap chao thap cam</li>
+                        <li>Mi hoanh thanh</li>
+                    </ol>
+                </aside>
+            </section>
+        </main>
+
+        <div id="footer">
+            <p>&copy; 2026 Summer Cathy. All rights reserved.</p>
+        </div>
+<script src="js/init.js"></script>
+</body>
+</html>
