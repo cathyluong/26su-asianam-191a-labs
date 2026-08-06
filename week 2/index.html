@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Favorite Matcha Spots Map</title>
+	<link
+		href="https://unpkg.com/maplibre-gl@4.5.0/dist/maplibre-gl.css"
+		rel="stylesheet"
+	>
+	<style>
+		:root {
+			--bg-1: #ffe8f2;
+			--bg-2: #fff6dc;
+			--ink: #402b2b;
+			--title: #7c1f48;
+			--berry: #d87093;
+			--berry-dark: #8f2f56;
+			--matcha: #7fa866;
+			--matcha-dark: #4f7e44;
+			--panel: rgba(255, 255, 255, 0.84);
+			--shadow: 0 14px 30px rgba(124, 31, 72, 0.14);
+		}
+
+		* {
+			font-family: "Trebuchet MS", Verdana, sans-serif;
+			box-sizing: border-box;
+		}
+
+		html {
+			background: linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
+		}
+
+		body {
+			margin: 0;
+			min-height: 100vh;
+			background:
+				radial-gradient(circle at 12% 10%, rgba(216, 112, 147, 0.2), transparent 36%),
+				radial-gradient(circle at 85% 20%, rgba(127, 168, 102, 0.2), transparent 38%),
+				linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
+			color: var(--ink);
+			display: grid;
+			grid-template-rows: auto 1fr;
+			padding: 0.5rem 0.7rem 1rem;
+		}
+
+		header {
+			padding: 1rem 1rem 0.4rem;
+			text-align: center;
+		}
+
+		h1 {
+			margin: 0;
+			letter-spacing: 0.03em;
+			color: var(--title);
+			font-size: clamp(1.55rem, 3.6vw, 2.25rem);
+		}
+
+		p {
+			margin: 0.4rem 0 0;
+			font-size: 0.98rem;
+			color: #5f3940;
+		}
+
+		.layout {
+			padding: 0.9rem;
+			display: grid;
+			grid-template-columns: 290px 1fr;
+			gap: 1rem;
+			min-height: 0;
+		}
+
+		.panel {
+			background: var(--panel);
+			border: 1px solid #efbfd0;
+			border-radius: 12px;
+			box-shadow: var(--shadow);
+			padding: 1rem 0.95rem;
+			height: fit-content;
+		}
+
+		.panel h2 {
+			margin: 0 0 0.7rem;
+			font-size: 1.02rem;
+			text-transform: uppercase;
+			letter-spacing: 0.1em;
+			color: var(--berry-dark);
+		}
+
+		.controls {
+			display: grid;
+			gap: 0.6rem;
+		}
+
+		button {
+			appearance: none;
+			border: 1px solid rgba(143, 47, 86, 0.26);
+			border-radius: 999px;
+			padding: 0.66rem 0.9rem;
+			background: linear-gradient(135deg, #f9cedd, #ffdfea 44%, #d7ecbe);
+			color: var(--berry-dark);
+			font-weight: 600;
+			letter-spacing: 0.02em;
+			cursor: pointer;
+			transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+			box-shadow: 0 7px 16px rgba(124, 31, 72, 0.12);
+		}
+
+		button:hover {
+			transform: translateY(-2px) scale(1.01);
+			filter: brightness(1.03);
+			box-shadow: 0 9px 20px rgba(124, 31, 72, 0.16);
+		}
+
+		button:active {
+			transform: translateY(0);
+		}
+
+		button.secondary {
+			background: linear-gradient(135deg, #cce7b1, #e8f6d8 45%, #ffd6e4);
+			color: #325d39;
+			border-color: rgba(79, 126, 68, 0.28);
+		}
+
+		#map {
+			min-height: 70vh;
+			width: 100%;
+			border-radius: 12px;
+			box-shadow: var(--shadow);
+			border: 3px solid #e4a6b8;
+			overflow: hidden;
+		}
+
+		#map:hover {
+			border-color: #d87093;
+		}
+
+		.matcha-marker {
+			width: 20px;
+			height: 20px;
+			border-radius: 50%;
+			background:
+				radial-gradient(circle at 34% 34%, #ffeaf1 0 24%, transparent 25%),
+				linear-gradient(145deg, #86b06e, #5f8f55 42%, #eb98b8 100%);
+			border: 2px solid #fff3f7;
+			box-shadow: 0 0 0 2px rgba(91, 140, 79, 0.2), 0 5px 10px rgba(124, 31, 72, 0.2);
+		}
+
+		.maplibregl-popup-content {
+			font-family: "Trebuchet MS", "Gill Sans", sans-serif;
+			color: #3f2a2b;
+			border-radius: 10px;
+			border: 1px solid #efbfd0;
+			background: linear-gradient(180deg, #fff7fb 0%, #f4fbe9 100%);
+		}
+
+		.maplibregl-popup-tip {
+			border-top-color: #fff7fb;
+			border-bottom-color: #fff7fb;
+		}
+
+		.sparkle {
+			display: inline-block;
+			padding: 0.18rem 0.56rem;
+			border-radius: 999px;
+			margin-bottom: 0.4rem;
+			font-size: 0.75rem;
+			font-weight: 700;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			color: #7a3152;
+			background: linear-gradient(120deg, #ffe0eb, #e2f2cb);
+			border: 1px solid #efbfd0;
+		}
+
+		@media (max-width: 860px) {
+			.layout {
+				grid-template-columns: 1fr;
+			}
+
+			#map {
+				min-height: 60vh;
+			}
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<div class="sparkle">Strawberry Matcha Map</div>
+		<h1>My Favorite Matcha Spots</h1>
+		<p>Click a button to hop between cafes and sip the pink + green vibes.</p>
+	</header>
+
+	<main class="layout">
+		<aside class="panel">
+			<h2>Map Controls</h2>
+			<div class="controls">
+				<button id="btn-all">Show All Matcha Spots</button>
+				<button id="btn-daikanyama">Strawberry Stop: Daikanyama</button>
+				<button id="btn-shibuya">Whisk Break: Shibuya</button>
+				<button id="btn-ginza">Sweet Sip: Ginza</button>
+				<button class="secondary" id="btn-home">Reset to Cozy View</button>
+			</div>
+		</aside>
+
+		<section id="map" aria-label="Map of favorite matcha places"></section>
+	</main>
+
+	<script src="https://unpkg.com/maplibre-gl@4.5.0/dist/maplibre-gl.js"></script>
+	<script>
+		const map = new maplibregl.Map({
+			container: "map",
+			style: "https://demotiles.maplibre.org/style.json",
+			center: [139.7, 35.67],
+			zoom: 11.5
+		});
+
+		const favoriteSpots = [
+			{
+				id: "daikanyama",
+				name: "Saryo Matcha House",
+				lngLat: [139.7036, 35.6486],
+				note: "Creamy koicha and a calm afternoon vibe near Daikanyama T-Site."
+			},
+			{
+				id: "shibuya",
+				name: "Uji Garden Shibuya",
+				lngLat: [139.7011, 35.6595],
+				note: "Best matcha soft serve when I want something sweet and quick."
+			},
+			{
+				id: "ginza",
+				name: "Midori Tea Atelier",
+				lngLat: [139.7639, 35.6717],
+				note: "Great ceremonial set and wagashi pairings in a modern tea room."
+			}
+		];
+
+		const initialView = {
+			center: [139.7, 35.67],
+			zoom: 11.5
+		};
+
+		// Adds all matcha points to the map using a reusable function.
+		function addFavoriteSpots(spots) {
+			spots.forEach((spot) => {
+				const markerEl = document.createElement("div");
+				markerEl.className = "matcha-marker";
+
+				const popup = new maplibregl.Popup({ offset: 18 }).setHTML(
+					`<strong>${spot.name}</strong><br>${spot.note}`
+				);
+
+				new maplibregl.Marker({ element: markerEl })
+					.setLngLat(spot.lngLat)
+					.setPopup(popup)
+					.addTo(map);
+			});
+		}
+
+		function flyToSpot(spotId) {
+			const spot = favoriteSpots.find((item) => item.id === spotId);
+			if (!spot) return;
+
+			map.flyTo({
+				center: spot.lngLat,
+				zoom: 14,
+				speed: 0.9,
+				curve: 1.2
+			});
+		}
+
+		function showAllSpots() {
+			const bounds = new maplibregl.LngLatBounds();
+			favoriteSpots.forEach((spot) => bounds.extend(spot.lngLat));
+			map.fitBounds(bounds, { padding: 70, duration: 1200 });
+		}
+
+		function resetMapView() {
+			map.flyTo({
+				center: initialView.center,
+				zoom: initialView.zoom,
+				speed: 0.8
+			});
+		}
+
+		map.on("load", () => {
+			addFavoriteSpots(favoriteSpots);
+			showAllSpots();
+		});
+
+		// Buttons use event listeners to trigger map interaction functions.
+		document.getElementById("btn-all").addEventListener("click", showAllSpots);
+		document.getElementById("btn-daikanyama").addEventListener("click", () => flyToSpot("daikanyama"));
+		document.getElementById("btn-shibuya").addEventListener("click", () => flyToSpot("shibuya"));
+		document.getElementById("btn-ginza").addEventListener("click", () => flyToSpot("ginza"));
+		document.getElementById("btn-home").addEventListener("click", resetMapView);
+	</script>
+</body>
+</html>
