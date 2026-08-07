@@ -269,7 +269,7 @@ function popupNode(response) {
 			<span class="popup-score-pill" style="background:${tier.bg}; color:${tier.color};">Studyability tier ${tier.label}</span>
 		</div>
 		<ul class="popup-list">
-			<li><strong>Overall rating:</strong> ${response.overallRating !== null ? `${response.overallRating}/10` : 'Not provided'}</li>
+			<li><strong>Overall rating:</strong> ${response.overallRating !== null ? `${response.overallRating}/5` : 'Not provided'}</li>
 			<li><strong>Studyability rating:</strong> ${response.studyabilityRating !== null ? `${response.studyabilityRating}/10` : 'Not provided'}</li>
 			<li><strong>Has:</strong> ${escapeHtml(response.amenities.length ? response.amenities.join(', ') : 'No amenities listed')}</li>
 		</ul>
