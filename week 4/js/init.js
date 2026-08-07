@@ -1,6 +1,10 @@
+const userProvidedMapStyle = 'https://api.maptiler.com/maps/019fd983-f457-7dba-97c5-07a8dc637a2e/style.json?key=domjvUPbX2qSlWXv88Xn';
+const defaultPrimaryMapStyle = 'https://tiles.openfreemap.org/styles/liberty';
+const backupMapStyle = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
+
 const baseMapStyles = [
-	'https://tiles.openfreemap.org/styles/liberty',
-	'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json'
+	userProvidedMapStyle || defaultPrimaryMapStyle,
+	backupMapStyle
 ];
 
 let map = new maplibregl.Map({
@@ -13,23 +17,23 @@ let map = new maplibregl.Map({
 map.addControl(new maplibregl.NavigationControl(), 'top-right');
 
 const statusText = document.getElementById('status-text');
-const responseList = document.getElementById('response-list');
+const tierFilterButtons = Array.from(document.querySelectorAll('[data-tier-filter]'));
 
-const formResponseSheetUrl = 'https://docs.google.com/spreadsheets/d/1IbEogcWVaEV0hF1STa83jY0_yxfGr3urCXxs-xyPKzY/gviz/tq?tqx=out:csv&gid=0';
+const formResponseSheetUrls = [
+	'https://docs.google.com/spreadsheets/d/e/2PACX-1vQJtwXRpSYKZW7x1ADt1rOghMmoua6lLcywG140jSoSgpmjJUoOoy9noZR5UTS5-LUkcPWud3UZUQrh/pub?output=csv',
+	'https://docs.google.com/spreadsheets/d/1IbEogcWVaEV0hF1STa83jY0_yxfGr3urCXxs-xyPKzY/gviz/tq?tqx=out:csv&gid=0'
+];
 const defaultCenter = { lat: 34.0522, lng: -118.2437 };
 const geocodeCache = new Map();
+const markerInstances = [];
+
+let allResponses = [];
+let activeTierFilter = 'all';
 
 function readCssVar(name, fallback) {
 	const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 	return value || fallback;
 }
-
-const vibeStyles = {
-	'Focus Zone': { color: readCssVar('--vibe-focus', '#94c8ad'), bg: 'rgba(148, 200, 173, 0.2)' },
-	'Social Buzz': { color: readCssVar('--vibe-social', '#f6d98d'), bg: 'rgba(246, 217, 141, 0.24)' },
-	'Fresh Air': { color: readCssVar('--vibe-fresh', '#86b6e4'), bg: 'rgba(134, 182, 228, 0.2)' },
-	'Cozy Corner': { color: readCssVar('--vibe-cozy', '#db6b9f'), bg: 'rgba(219, 107, 159, 0.2)' }
-};
 
 let triedStyleFallback = false;
 
@@ -47,7 +51,9 @@ map.on('error', (event) => {
 
 	triedStyleFallback = true;
 	map.setStyle(baseMapStyles[1]);
-	statusText.textContent = 'Using backup basemap style.';
+	if (statusText) {
+		statusText.textContent = 'Using backup basemap style.';
+	}
 });
 
 function normalizeKey(key) {
@@ -183,21 +189,6 @@ async function geocodeArea(areaText) {
 	return null;
 }
 
-function classifyVibe(vibeSourceText) {
-	const text = (vibeSourceText || '').toLowerCase();
-
-	if (/quiet|silent|library|lock ?in|focus|study/i.test(text)) {
-		return 'Focus Zone';
-	}
-	if (/busy|social|friends|chat|crowd|music|lively/i.test(text)) {
-		return 'Social Buzz';
-	}
-	if (/outdoor|patio|sun|nature|fresh ?air|garden/i.test(text)) {
-		return 'Fresh Air';
-	}
-	return 'Cozy Corner';
-}
-
 function formatAmenities(rawValue) {
 	return String(rawValue || '')
 		.split(',')
@@ -205,80 +196,109 @@ function formatAmenities(rawValue) {
 		.filter((item) => item.length > 0);
 }
 
+function escapeHtml(value) {
+	return String(value || '')
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&#39;');
+}
+
+function studyabilityTier(rating) {
+	if (rating !== null && rating >= 8) {
+		return 'top';
+	}
+
+	if (rating !== null && rating >= 5) {
+		return 'mid';
+	}
+
+	return 'low';
+}
+
+function tierMeta(tier) {
+	if (tier === 'top') {
+		return {
+			label: '8 to 10',
+			color: '#f866b2',
+			bg: 'rgba(248, 102, 178, 0.18)'
+		};
+	}
+
+	if (tier === 'mid') {
+		return {
+			label: '5 to 7',
+			color: '#ff97c8',
+			bg: 'rgba(255, 151, 200, 0.18)'
+		};
+	}
+
+	return {
+		label: '1 to 4',
+		color: '#ffc2df',
+		bg: 'rgba(255, 194, 223, 0.22)'
+	};
+}
+
+function responseMatchesFilter(response, tierFilter) {
+	return tierFilter === 'all' || response.studyabilityTier === tierFilter;
+}
+
 function markerElement(color) {
 	const marker = document.createElement('div');
+	marker.className = 'custom-marker';
 	marker.style.width = '0.95rem';
 	marker.style.height = '0.95rem';
 	marker.style.borderRadius = '50%';
 	marker.style.background = color;
 	marker.style.border = '2px solid rgba(255,255,255,0.95)';
-	marker.style.boxShadow = '0 0 0 1px rgba(124,31,72,0.15), 0 4px 10px rgba(124,31,72,0.25)';
+	marker.style.boxShadow = '0 0 0 1px rgba(42, 72, 49, 0.2), 0 4px 10px rgba(42, 72, 49, 0.3)';
 	return marker;
 }
 
-function popupMarkup(response) {
-	const overallText = response.overallRating === null ? 'N/A' : `${response.overallRating}/5`;
-	const studyText = response.studyabilityRating === null ? 'N/A' : `${response.studyabilityRating}/10`;
-	const amenitiesText = response.amenities.length ? response.amenities.join(', ') : 'No amenities listed';
-
-	return `
-		<div class="popup-card">
-			<div class="popup-kicker">study spot pick</div>
-			<h3>${response.spotName}</h3>
-			<p class="popup-note">${response.why || 'No note was shared.'}</p>
-			<ul class="popup-meta">
-				<li><strong>Area:</strong> ${response.area || 'LA/OC area'}</li>
-				<li><strong>Overall:</strong> ${overallText}</li>
-				<li><strong>Studyability:</strong> ${studyText}</li>
-				<li><strong>Amenities:</strong> ${amenitiesText}</li>
-				<li><strong>Vibe:</strong> ${response.vibe}</li>
-				<li><strong>Submitted:</strong> ${response.timestamp || 'Unknown time'}</li>
-			</ul>
+function popupNode(response) {
+	const tier = tierMeta(response.studyabilityTier);
+	const popup = document.createElement('div');
+	popup.className = 'popup-card';
+	popup.innerHTML = `
+		<div class="popup-kicker">study spot pick</div>
+		<h3>${escapeHtml(response.spotName)}</h3>
+		<p class="popup-area">${escapeHtml(response.area || 'LA/OC area')}</p>
+		<div class="popup-scores">
+			<span class="popup-score-pill" style="background:${tier.bg}; color:${tier.color};">Studyability tier ${tier.label}</span>
 		</div>
+		<ul class="popup-list">
+			<li><strong>Overall rating:</strong> ${response.overallRating !== null ? `${response.overallRating}/10` : 'Not provided'}</li>
+			<li><strong>Studyability rating:</strong> ${response.studyabilityRating !== null ? `${response.studyabilityRating}/10` : 'Not provided'}</li>
+			<li><strong>Has:</strong> ${escapeHtml(response.amenities.length ? response.amenities.join(', ') : 'No amenities listed')}</li>
+		</ul>
+		<p class="popup-note"><strong>What makes this cafe different?</strong> ${escapeHtml(response.why || 'No extra note was shared for this cafe.')}</p>
 	`;
-}
-
-function addResponsesToList(responses) {
-	responseList.innerHTML = '';
-
-	for (let i = 0; i < responses.length; i += 1) {
-		const response = responses[i];
-		const style = vibeStyles[response.vibe] || vibeStyles['Cozy Corner'];
-
-		const card = document.createElement('details');
-		card.className = 'response-item';
-		card.style.borderLeftColor = style.color;
-		card.innerHTML = `
-			<summary class="response-summary">
-				<div class="response-topline">
-					<h3>${response.spotName}</h3>
-					<span class="response-tag" style="background:${style.bg}; color:${style.color};">${response.vibe}</span>
-				</div>
-				<p class="response-meta">${response.area || 'LA/OC'} • Overall ${response.overallRating === null ? 'N/A' : `${response.overallRating}/5`} • Studyability ${response.studyabilityRating === null ? 'N/A' : `${response.studyabilityRating}/10`}</p>
-			</summary>
-			<div class="response-body">
-				<p>${response.why || 'No extra note provided.'}</p>
-				<p><strong>Amenities:</strong> ${response.amenities.length ? response.amenities.join(', ') : 'No amenities listed.'}</p>
-			</div>
-		`;
-
-		responseList.appendChild(card);
-	}
+	return popup;
 }
 
 function addResponsesToMap(responses) {
+	for (let i = 0; i < markerInstances.length; i += 1) {
+		markerInstances[i].remove();
+	}
+	markerInstances.length = 0;
+
 	const bounds = new maplibregl.LngLatBounds();
 
 	for (let i = 0; i < responses.length; i += 1) {
 		const response = responses[i];
-		const style = vibeStyles[response.vibe] || vibeStyles['Cozy Corner'];
-		const marker = markerElement(style.color);
-		const popup = new maplibregl.Popup({ offset: 18 }).setHTML(popupMarkup(response));
+		const markerColor = tierMeta(response.studyabilityTier).color;
 
-		new maplibregl.Marker(marker)
+		const marker = markerElement(markerColor);
+		const popup = new maplibregl.Popup({ offset: 18 }).setDOMContent(popupNode(response));
+
+		const markerInstance = new maplibregl.Marker({ element: marker })
 			.setLngLat([response.lng, response.lat])
 			.setPopup(popup)
 			.addTo(map);
+
+		markerInstances.push(markerInstance);
 
 		bounds.extend([response.lng, response.lat]);
 	}
@@ -286,6 +306,29 @@ function addResponsesToMap(responses) {
 	if (!bounds.isEmpty()) {
 		map.fitBounds(bounds, { padding: 55, maxZoom: 13, duration: 900 });
 	}
+}
+
+function renderResponses() {
+	const filteredResponses = allResponses.filter((response) => responseMatchesFilter(response, activeTierFilter));
+
+	addResponsesToMap(filteredResponses);
+
+	if (statusText) {
+		const filterLabel = activeTierFilter === 'all' ? 'all tiers' : `tier ${tierMeta(activeTierFilter).label}`;
+		statusText.textContent = `Showing ${filteredResponses.length} study spot response${filteredResponses.length === 1 ? '' : 's'} for ${filterLabel}.`;
+	}
+}
+
+function setupInteractions() {
+	tierFilterButtons.forEach((button) => {
+		button.addEventListener('click', () => {
+			activeTierFilter = button.dataset.tierFilter || 'all';
+			tierFilterButtons.forEach((item) => {
+				item.classList.toggle('is-active', item === button);
+			});
+			renderResponses();
+		});
+	});
 }
 
 async function convertRowsToResponses(rows) {
@@ -298,12 +341,12 @@ async function convertRowsToResponses(rows) {
 		let lat = parseCoordinate(pickValue(lookup, ['latitude', 'lat', 'y', 'coordinateslat', 'locationlat']));
 		let lng = parseCoordinate(pickValue(lookup, ['longitude', 'lng', 'lon', 'long', 'longtitude', 'longtitute', 'x', 'coordinateslng', 'locationlng']));
 
-		const spotName = pickValue(lookup, ['untitled question', 'what is your favorite study cafe', 'favorite study cafe', 'favorite study spot', 'study spot', 'spot name', 'location name', 'cafe name', 'favorite spot']) || 'Unnamed Study Spot';
+		const spotName = pickValue(lookup, ['what is the name of this cafe', 'untitled question', 'what is your favorite study cafe', 'favorite study cafe', 'favorite study spot', 'study spot', 'spot name', 'location name', 'cafe name', 'favorite spot']) || 'Unnamed Study Spot';
 		const area = pickValue(lookup, ['what area is this cafe located in', 'city', 'neighborhood', 'area', 'county', 'location']) || '';
 		const amenitiesRaw = pickValue(lookup, ['which of these does the cafe have', 'amenities', 'features']) || '';
 		const overallRating = parseRating(pickValue(lookup, ['how would you rate this cafe overall', 'overall rating', 'rating']));
 		const studyabilityRating = parseRating(pickValue(lookup, ['how would you rate the studyability of this cafe', 'studyability', 'study rating']));
-		const why = pickValue(lookup, ['what makes this cafe different from others that you prefer it most', 'why this spot', 'why', 'notes', 'description']);
+		const why = pickValue(lookup, ['what makes this cafe different from others that you ve frequented', 'what makes this cafe different from others that you\'ve frequented', 'what makes this cafe different from others that you prefer it most', 'why this spot', 'why', 'notes', 'description']);
 		const timestamp = pickValue(lookup, ['timestamp']);
 
 		if (lat === null || lng === null) {
@@ -315,17 +358,11 @@ async function convertRowsToResponses(rows) {
 		}
 
 		const amenities = formatAmenities(amenitiesRaw);
-		const vibeSource = [
-			amenitiesRaw,
-			why,
-			spotName,
-			area,
-			studyabilityRating === null ? '' : `studyability ${studyabilityRating}`
-		].join(' ');
-
-		const vibe = classifyVibe(vibeSource);
+		const tier = studyabilityTier(studyabilityRating);
+		const id = `${timestamp || 'response'}-${i}-${spotName}`;
 
 		parsedResponses.push({
+			id,
 			lat,
 			lng,
 			spotName,
@@ -333,9 +370,9 @@ async function convertRowsToResponses(rows) {
 			amenities,
 			overallRating,
 			studyabilityRating,
+			studyabilityTier: tier,
 			why,
-			timestamp,
-			vibe
+			timestamp
 		});
 	}
 
@@ -369,13 +406,36 @@ function parseSheetWithTimeout(url, timeoutMs) {
 	]);
 }
 
+async function loadRowsWithFallback(urls, timeoutMs) {
+	let lastError = null;
+
+	for (let i = 0; i < urls.length; i += 1) {
+		try {
+			const rows = await parseSheetWithTimeout(urls[i], timeoutMs);
+			if (Array.isArray(rows) && rows.length > 0) {
+				return rows;
+			}
+		} catch (error) {
+			lastError = error;
+		}
+	}
+
+	if (lastError) {
+		throw lastError;
+	}
+
+	return [];
+}
+
 async function loadResponses() {
 	let rows = null;
 
 	try {
-		rows = await parseSheetWithTimeout(formResponseSheetUrl, 7000);
+		rows = await loadRowsWithFallback(formResponseSheetUrls, 7000);
 	} catch (error) {
-		statusText.textContent = 'Could not load Google Form responses. Set sheet access to Anyone with the link (Viewer) or publish as CSV.';
+		if (statusText) {
+			statusText.textContent = 'Could not load Google Form responses. Set sheet access to Anyone with the link (Viewer) or publish as CSV.';
+		}
 		console.error('Google Form response loading failed:', error);
 		return;
 	}
@@ -383,14 +443,15 @@ async function loadResponses() {
 	const responses = await convertRowsToResponses(rows);
 
 	if (!responses.length) {
-		statusText.textContent = 'No survey responses yet. Submit the form to add your first study cafe to the map.';
-		responseList.innerHTML = '<p class="response-note">Waiting for survey responses.</p>';
+		if (statusText) {
+			statusText.textContent = 'No survey responses yet. Submit the form to add your first study cafe to the map.';
+		}
 		return;
 	}
 
-	statusText.textContent = `Loaded ${responses.length} study spot response${responses.length === 1 ? '' : 's'}.`;
-	addResponsesToMap(responses);
-	addResponsesToList(responses);
+	allResponses = responses;
+	renderResponses();
 }
 
+setupInteractions();
 loadResponses();
