@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Cathy's Dreamy Study Spot Atlas</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="shortcut icon" href="#" />
+        <link rel="stylesheet" href="style.css" />
+
+        <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.0.0/dist/maplibre-gl.css" />
+        <script src="https://unpkg.com/maplibre-gl@5.0.0/dist/maplibre-gl.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    </head>
+
+    <body>
+        <main class="page-shell">
+            <section class="info-panel">
+                <div class="hero-card">
+                    <p class="eyebrow">୨୧ study cafe atlas ୨୧</p>
+                    <h1>dreamy study spots from real survey besties ♡</h1>
+                    <p class="intro-copy">
+                        each pin comes from the google form below! click around to explore cafes by area,
+                        compare studyability, and read everyone's little notes about what makes a cafe worth staying for.
+                    </p>
+                </div>
+
+                <p class="sparkle-divider" aria-hidden="true">❥・・ ┈┈┈༚༅༚˳ . ୨୧ . ˳༚༅༚┈┈ ・・❥</p>
+
+                <section class="legend-card" aria-labelledby="legend-heading">
+                    <div class="card-heading-row">
+                        <h2 id="legend-heading">map key 🍰</h2>
+                        <span class="chip">studyability tiers</span>
+                    </div>
+                    <div class="legend-list">
+                        <div class="legend-item">
+                            <span class="legend-swatch legend-swatch-top"></span>
+                            <div>
+                                <h3>8 to 10</h3>
+                                <p>top tier lock-in spots with dreamy study energy.</p>
+                            </div>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-swatch legend-swatch-mid"></span>
+                            <div>
+                                <h3>5 to 7</h3>
+                                <p>balanced cafes for long sessions, catch-ups, and soft focus.</p>
+                            </div>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-swatch legend-swatch-low"></span>
+                            <div>
+                                <h3>1 to 4</h3>
+                                <p>more casual spots that still have charm, snacks, or vibes.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="responses-card" aria-labelledby="responses-heading">
+                    <div class="card-heading-row">
+                        <h2 id="responses-heading">response list 💌</h2>
+                        <span class="chip" id="response-count">Loading...</span>
+                    </div>
+                    <div id="contents" class="spot-list"></div>
+                </section>
+
+                <section class="form-card" aria-labelledby="form-heading">
+                    <div class="card-heading-row">
+                        <h2 id="form-heading">add your fave spot ᰔ</h2>
+                        <span class="chip">live from google forms</span>
+                    </div>
+                    <p class="form-copy">share your go-to cafe so it can join the map for other students to explore!</p>
+                    <a
+                        class="form-link-button"
+                        href="https://docs.google.com/forms/d/e/1FAIpQLScNmwXi8pHZxNT9ch75n4qgKzh3juei2W75F6lO1y0e8WV_Sw/viewform"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >add to the map ♡</a>
+                </section>
+            </section>
+
+            <section class="map-panel">
+                <div class="map-frame">
+                    <div class="map-copy">
+                        <p class="eyebrow">map view</p>
+                        <h2>pink skies, cafe pies, and study vibes ✩</h2>
+                    </div>
+                    <div id="map" aria-label="Map of study cafes"></div>
+                </div>
+            </section>
+        </main>
+
+        <script src="js/init.js"></script>
+    </body>
+</html>

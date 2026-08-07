@@ -1,6 +1,11 @@
-const map = new maplibregl.Map({
+const baseMapStyles = [
+	'https://tiles.openfreemap.org/styles/liberty',
+	'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json'
+];
+
+let map = new maplibregl.Map({
 	container: 'map',
-	style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
+	style: baseMapStyles[0],
 	center: [-118.2437, 34.0522],
 	zoom: 9.3
 });
@@ -14,12 +19,36 @@ const formResponseSheetUrl = 'https://docs.google.com/spreadsheets/d/1IbEogcWVaE
 const defaultCenter = { lat: 34.0522, lng: -118.2437 };
 const geocodeCache = new Map();
 
+function readCssVar(name, fallback) {
+	const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+	return value || fallback;
+}
+
 const vibeStyles = {
-	'Focus Zone': { color: '#76a85d', bg: 'rgba(118, 168, 93, 0.14)' },
-	'Social Buzz': { color: '#f29f67', bg: 'rgba(242, 159, 103, 0.16)' },
-	'Fresh Air': { color: '#5e9fcb', bg: 'rgba(94, 159, 203, 0.16)' },
-	'Cozy Corner': { color: '#d87093', bg: 'rgba(216, 112, 147, 0.16)' }
+	'Focus Zone': { color: readCssVar('--vibe-focus', '#94c8ad'), bg: 'rgba(148, 200, 173, 0.2)' },
+	'Social Buzz': { color: readCssVar('--vibe-social', '#f6d98d'), bg: 'rgba(246, 217, 141, 0.24)' },
+	'Fresh Air': { color: readCssVar('--vibe-fresh', '#86b6e4'), bg: 'rgba(134, 182, 228, 0.2)' },
+	'Cozy Corner': { color: readCssVar('--vibe-cozy', '#db6b9f'), bg: 'rgba(219, 107, 159, 0.2)' }
 };
+
+let triedStyleFallback = false;
+
+map.on('error', (event) => {
+	if (triedStyleFallback) {
+		return;
+	}
+
+	const message = String(event?.error?.message || '').toLowerCase();
+	const shouldFallback = message.includes('failed to fetch') || message.includes('403') || message.includes('401');
+
+	if (!shouldFallback) {
+		return;
+	}
+
+	triedStyleFallback = true;
+	map.setStyle(baseMapStyles[1]);
+	statusText.textContent = 'Using backup basemap style.';
+});
 
 function normalizeKey(key) {
 	return key.toLowerCase().replace(/[^a-z0-9]/g, '');
