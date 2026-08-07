@@ -1,0 +1,80 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "student": "Anonymous response 1",
+        "location_name": "Los Angeles",
+        "state": "California",
+        "impact_theme": "Emotional stress",
+        "summary": "After someone close to them was detained by ICE, this student said it became a lot harder to stay focused in school because they were carrying fear, grief, and stress at the same time.",
+        "support_need": "Accessible mental health care and trusted community spaces"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-118.2437, 34.0522]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "student": "Anonymous response 2",
+        "location_name": "San Diego",
+        "state": "California",
+        "impact_theme": "Family separation",
+        "summary": "This response shows how detention and deportation can suddenly change everything at home, especially when other relatives have to step in and take over caregiving or financial responsibilities.",
+        "support_need": "Family resource support and legal guidance"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-117.1611, 32.7157]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "student": "Anonymous response 3",
+        "location_name": "Las Vegas",
+        "state": "Nevada",
+        "impact_theme": "Financial pressure",
+        "summary": "A loved one's removal created sudden financial pressure, and this response reflects how quickly housing costs, bills, and everyday expenses can become harder to manage.",
+        "support_need": "Emergency aid and long-term financial support"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-115.1398, 36.1699]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "student": "Anonymous response 4",
+        "location_name": "Daly City",
+        "state": "California",
+        "impact_theme": "Limited support",
+        "summary": "This student pointed out how hard it can be to find campus support that really understands immigration-related grief, family separation, and how those things can affect school life.",
+        "support_need": "Culturally informed campus support services"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-122.4702, 37.6879]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "student": "Anonymous response 5",
+        "location_name": "Honolulu",
+        "state": "Hawaii",
+        "impact_theme": "Silence and stigma",
+        "summary": "Fear and stigma around detention and deportation made it hard for this family to talk openly about what happened, which made the student feel even more isolated and alone.",
+        "support_need": "Community spaces that reduce stigma and encourage dialogue"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-157.8583, 21.3069]
+      }
+    }
+  ]
+}
