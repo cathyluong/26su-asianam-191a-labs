@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Favorite Matcha Spots Map</title>
+	<title>my favorite matcha spots 🍵 ྀི⋆˚🍓࿔</title>
 	<link
 		href="https://unpkg.com/maplibre-gl@4.5.0/dist/maplibre-gl.css"
 		rel="stylesheet"
@@ -34,6 +34,8 @@
 		body {
 			margin: 0;
 			min-height: 100vh;
+			position: relative;
+			overflow-x: hidden;
 			background:
 				radial-gradient(circle at 12% 10%, rgba(216, 112, 147, 0.2), transparent 36%),
 				radial-gradient(circle at 85% 20%, rgba(127, 168, 102, 0.2), transparent 38%),
@@ -42,6 +44,44 @@
 			display: grid;
 			grid-template-rows: auto 1fr;
 			padding: 0.5rem 0.7rem 1rem;
+		}
+
+		body::before,
+		body::after {
+			content: "";
+			position: fixed;
+			width: 240px;
+			height: 240px;
+			border-radius: 50%;
+			pointer-events: none;
+			filter: blur(2px);
+			z-index: -1;
+			animation: floaty 10s ease-in-out infinite;
+		}
+
+		body::before {
+			right: -60px;
+			top: 80px;
+			background: radial-gradient(circle at 35% 30%, rgba(255, 245, 249, 0.95), rgba(233, 172, 198, 0.45) 50%, rgba(233, 172, 198, 0) 72%);
+		}
+
+		body::after {
+			left: -70px;
+			bottom: 50px;
+			background: radial-gradient(circle at 35% 30%, rgba(246, 255, 238, 0.95), rgba(164, 200, 124, 0.4) 52%, rgba(164, 200, 124, 0) 74%);
+			animation-delay: -4s;
+		}
+
+		@keyframes floaty {
+			0% {
+				transform: translateY(0px) translateX(0px);
+			}
+			50% {
+				transform: translateY(-14px) translateX(9px);
+			}
+			100% {
+				transform: translateY(0px) translateX(0px);
+			}
 		}
 
 		header {
@@ -106,6 +146,13 @@
 			box-shadow: 0 7px 16px rgba(124, 31, 72, 0.12);
 		}
 
+		.btn-icon {
+			display: inline-block;
+			margin-right: 0.35rem;
+			font-size: 0.9rem;
+			filter: saturate(1.1);
+		}
+
 		button:hover {
 			transform: translateY(-2px) scale(1.01);
 			filter: brightness(1.03);
@@ -123,8 +170,10 @@
 		}
 
 		#map {
-			min-height: 70vh;
+			height: clamp(340px, 56vh, 520px);
 			width: 100%;
+			max-width: 920px;
+			justify-self: start;
 			border-radius: 12px;
 			box-shadow: var(--shadow);
 			border: 3px solid #e4a6b8;
@@ -154,6 +203,59 @@
 			background: linear-gradient(180deg, #fff7fb 0%, #f4fbe9 100%);
 		}
 
+		.popup-card {
+			min-width: 220px;
+		}
+
+		.popup-kicker {
+			display: inline-block;
+			padding: 0.16rem 0.5rem;
+			border-radius: 999px;
+			margin-bottom: 0.45rem;
+			font-size: 0.72rem;
+			font-weight: 700;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			color: #7a3152;
+			background: linear-gradient(120deg, #ffe0eb, #e2f2cb);
+			border: 1px solid #efbfd0;
+		}
+
+		.popup-title {
+			margin: 0;
+			font-size: 1rem;
+			color: var(--berry-dark);
+		}
+
+		.popup-note {
+			margin: 0.28rem 0 0.6rem;
+			font-size: 0.92rem;
+			line-height: 1.45;
+			color: #5f3940;
+		}
+
+		.popup-meta {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			display: grid;
+			gap: 0.35rem;
+			font-size: 0.88rem;
+		}
+
+		.popup-meta strong {
+			color: #6a2947;
+		}
+
+		.popup-rating {
+			margin-top: 0.65rem;
+			padding-top: 0.55rem;
+			border-top: 1px dashed #ebb9cb;
+			font-size: 0.9rem;
+			font-weight: 700;
+			color: #4f7e44;
+		}
+
 		.maplibregl-popup-tip {
 			border-top-color: #fff7fb;
 			border-bottom-color: #fff7fb;
@@ -179,27 +281,29 @@
 			}
 
 			#map {
-				min-height: 60vh;
+				height: 46vh;
+				min-height: 300px;
+				max-width: 100%;
 			}
 		}
 	</style>
 </head>
 <body>
 	<header>
-		<div class="sparkle">Strawberry Matcha Map</div>
-		<h1>My Favorite Matcha Spots</h1>
-		<p>Click a button to hop between cafes and sip the pink + green vibes.</p>
+		<div class="sparkle">cathy's webdevelopment extravaganza</div>
+		<h1>my favorite matcha spots 🍵 ྀི⋆˚🍓࿔</h1>
+		<p>click a button to hop between cafes and sip my favorite matcha drinks.</p>
 	</header>
 
 	<main class="layout">
 		<aside class="panel">
 			<h2>Map Controls</h2>
 			<div class="controls">
-				<button id="btn-all">Show All Matcha Spots</button>
-				<button id="btn-daikanyama">Strawberry Stop: Daikanyama</button>
-				<button id="btn-shibuya">Whisk Break: Shibuya</button>
-				<button id="btn-ginza">Sweet Sip: Ginza</button>
-				<button class="secondary" id="btn-home">Reset to Cozy View</button>
+				<button id="btn-all"><span class="btn-icon">✿</span>Show All Matcha Spots</button>
+				<button id="btn-series-a"><span class="btn-icon">♡</span>Strawberry Stop: Series A</button>
+				<button id="btn-dumbstruck"><span class="btn-icon">★</span>Whisk Break: Dumbstruck Coffee</button>
+				<button id="btn-rok"><span class="btn-icon">❀</span>Sweet Sip: rōk coffee and tea</button>
+				<button class="secondary" id="btn-home"><span class="btn-icon">☁</span>Reset to Cozy View</button>
 			</div>
 		</aside>
 
@@ -210,46 +314,71 @@
 	<script>
 		const map = new maplibregl.Map({
 			container: "map",
-			style: "https://demotiles.maplibre.org/style.json",
+			style: "https://api.maptiler.com/maps/019fd983-f457-7dba-97c5-07a8dc637a2e/style.json?key=domjvUPbX2qSlWXv88Xn",
 			center: [139.7, 35.67],
 			zoom: 11.5
 		});
 
 		const favoriteSpots = [
 			{
-				id: "daikanyama",
-				name: "Saryo Matcha House",
-				lngLat: [139.7036, 35.6486],
-				note: "Creamy koicha and a calm afternoon vibe near Daikanyama T-Site."
+				id: "series-a-beverly-hills",
+				name: "Series A",
+				lngLat: [-118.3728589, 34.0642879],
+				note: "Beverly Hills, CA",
+				description: "my favorite matcha spot ever in LA. if series a has 100 fans, i am 1 of them, if series a has 10 fans, i am one of them, if series a has 1 fan, i am that fan, if series a has 0 fans, i am dead.",
+				address: "8328 Wilshire Blvd, Beverly Hills, CA 90211",
+				favoriteDrink: "blueberry matcha",
+				rating: "5/5 strawberries"
 			},
 			{
-				id: "shibuya",
-				name: "Uji Garden Shibuya",
-				lngLat: [139.7011, 35.6595],
-				note: "Best matcha soft serve when I want something sweet and quick."
+				id: "dumbstruck-coffee-city-of-industry",
+				name: "Dumbstruck Coffee",
+				lngLat: [-117.899848, 33.9957015],
+				note: "City of Industry, CA",
+				description: "kinda dont really remember what i got bc i've only been once but it was remarkable enough to be my top 3 matcha spots in la so that means something!",
+				address: "18508 Gale Ave, Ste B, City of Industry, CA 91748",
+				favoriteDrink: "double matcha or something",
+				rating: "4.6/5 strawberries"
 			},
 			{
-				id: "ginza",
-				name: "Midori Tea Atelier",
-				lngLat: [139.7639, 35.6717],
-				note: "Great ceremonial set and wagashi pairings in a modern tea room."
+				id: "rok-coffee-and-tea-los-angeles",
+				name: "rōk coffee and tea",
+				lngLat: [-118.3025363, 34.0525293],
+				note: "Los Angeles, CA",
+				description: "this place is overhyped for a reason. socal asian galore here but the matcha makes it worth it!!!",
+				address: "3060 W Olympic Blvd, Ste 150, Los Angeles, CA 90006",
+				favoriteDrink: "sky foam matcha",
+				rating: "4.6/5 strawberries"
 			}
 		];
 
+		function createPopupMarkup(spot) {
+			return `
+				<div class="popup-card">
+					<div class="popup-kicker">matcha diary pick</div>
+					<h3 class="popup-title">${spot.name}</h3>
+					<p class="popup-note">${spot.description}</p>
+					<ul class="popup-meta">
+						<li><strong>Address:</strong> ${spot.address}</li>
+						<li><strong>Favorite drink:</strong> ${spot.favoriteDrink}</li>
+						<li><strong>Area:</strong> ${spot.note}</li>
+					</ul>
+					<div class="popup-rating">My rating: ${spot.rating}</div>
+				</div>
+			`;
+		}
+
 		const initialView = {
-			center: [139.7, 35.67],
-			zoom: 11.5
+			center: [-118.25, 34.05],
+			zoom: 10.5
 		};
 
-		// Adds all matcha points to the map using a reusable function.
 		function addFavoriteSpots(spots) {
 			spots.forEach((spot) => {
 				const markerEl = document.createElement("div");
 				markerEl.className = "matcha-marker";
 
-				const popup = new maplibregl.Popup({ offset: 18 }).setHTML(
-					`<strong>${spot.name}</strong><br>${spot.note}`
-				);
+				const popup = new maplibregl.Popup({ offset: 18 }).setHTML(createPopupMarkup(spot));
 
 				new maplibregl.Marker({ element: markerEl })
 					.setLngLat(spot.lngLat)
@@ -289,11 +418,10 @@
 			showAllSpots();
 		});
 
-		// Buttons use event listeners to trigger map interaction functions.
 		document.getElementById("btn-all").addEventListener("click", showAllSpots);
-		document.getElementById("btn-daikanyama").addEventListener("click", () => flyToSpot("daikanyama"));
-		document.getElementById("btn-shibuya").addEventListener("click", () => flyToSpot("shibuya"));
-		document.getElementById("btn-ginza").addEventListener("click", () => flyToSpot("ginza"));
+		document.getElementById("btn-series-a").addEventListener("click", () => flyToSpot("series-a-beverly-hills"));
+		document.getElementById("btn-dumbstruck").addEventListener("click", () => flyToSpot("dumbstruck-coffee-city-of-industry"));
+		document.getElementById("btn-rok").addEventListener("click", () => flyToSpot("rok-coffee-and-tea-los-angeles"));
 		document.getElementById("btn-home").addEventListener("click", resetMapView);
 	</script>
 </body>
