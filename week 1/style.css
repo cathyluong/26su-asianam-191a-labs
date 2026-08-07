@@ -90,11 +90,52 @@ main {
 }
 
 .insta-carousel {
-    grid-area: carousel;
     position: relative;
-    width: min(100%, 620px);
-    justify-self: center;
+    width: 100%;
     padding: 0.9rem 0.75rem 0.8rem;
+}
+
+.social-and-lists {
+    grid-area: carousel;
+    display: grid;
+    grid-template-columns: minmax(0, 620px) minmax(260px, 1fr);
+    gap: 1rem;
+    align-items: start;
+}
+
+.social-divider {
+    grid-column: 1 / -1;
+    text-align: center;
+    margin: 0.1rem 0 0.2rem;
+    color: #a2466a;
+    letter-spacing: 0.04em;
+}
+
+.requirements-panel {
+    background: rgba(255, 255, 255, 0.78);
+    border: 1px solid #efbfd0;
+    border-radius: 16px;
+    padding: 1rem 1rem 0.85rem;
+    box-shadow: 0 10px 24px rgba(124, 31, 72, 0.08);
+}
+
+.requirements-panel h3 {
+    margin-bottom: 0.7rem;
+}
+
+.requirements-panel h4 {
+    margin: 0.6rem 0 0.35rem;
+    color: #8f2f56;
+    font-size: 0.98rem;
+}
+
+.requirements-panel ul,
+.requirements-panel ol {
+    margin: 0.4rem 0 0.85rem 1.25rem;
+}
+
+.requirements-panel li {
+    margin-bottom: 0.3rem;
 }
 
 .carousel-heading {
@@ -351,10 +392,19 @@ ol, ul {
         height: 55vh;
     }
 
-    .study-carousel {
+    .social-and-lists {
+        grid-template-columns: 1fr;
+        gap: 0.65rem;
+    }
+
+    .insta-carousel {
         width: 100%;
-        max-width: 460px;
+        max-width: 520px;
         padding: 0.85rem 0.4rem 0.8rem;
+    }
+
+    .requirements-panel {
+        max-width: 520px;
     }
 
     .ig-stage {
