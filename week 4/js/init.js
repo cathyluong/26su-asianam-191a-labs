@@ -288,7 +288,13 @@ function addResponsesToMap(responses) {
 
 	for (let i = 0; i < responses.length; i += 1) {
 		const response = responses[i];
-		const markerColor = tierMeta(response.studyabilityTier).color;
+		let markerColor = '#ffc2df';
+
+		if (response.studyabilityTier === 'top') {
+			markerColor = '#f866b2';
+		} else if (response.studyabilityTier === 'mid') {
+			markerColor = '#ff97c8';
+	}
 
 		const marker = markerElement(markerColor);
 		const popup = new maplibregl.Popup({ offset: 18 }).setDOMContent(popupNode(response));
