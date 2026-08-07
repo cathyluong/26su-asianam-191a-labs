@@ -1,0 +1,148 @@
+:root {
+	--bg: #fff6dc;
+	--ink: #402b2b;
+	--panel: rgba(255, 255, 255, 0.86);
+	--panel-line: #efbfd0;
+	--focus: #7fa866;
+	--social: #e2c14f;
+	--outdoor: #8db7e7;
+	--cozy: #d87093;
+}
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	font-family: "Trebuchet MS", Verdana, sans-serif;
+}
+
+body {
+	background: linear-gradient(180deg, #ffe8f2 0%, var(--bg) 100%);
+	color: var(--ink);
+	padding: 1rem;
+}
+
+.page {
+	width: min(900px, 100%);
+	margin: 0 auto;
+	display: grid;
+	gap: 0.9rem;
+}
+
+h1 {
+	color: #7c1f48;
+	font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+}
+
+header p {
+	color: #6b4c53;
+	margin-top: 0.25rem;
+}
+
+.card {
+	background: var(--panel);
+	border: 1px solid var(--panel-line);
+	border-radius: 12px;
+	padding: 0.85rem;
+}
+
+.card h2 {
+	font-size: 1rem;
+	margin-bottom: 0.5rem;
+	color: #7c1f48;
+}
+
+.legend {
+	list-style: none;
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 0.45rem;
+	margin-bottom: 0.6rem;
+}
+
+.legend li {
+	display: flex;
+	align-items: center;
+	gap: 0.45rem;
+	font-size: 0.92rem;
+}
+
+.dot {
+	width: 0.85rem;
+	height: 0.85rem;
+	border-radius: 50%;
+	border: 2px solid rgba(255, 255, 255, 0.95);
+	box-shadow: 0 0 0 1px rgba(124, 31, 72, 0.14);
+}
+
+.dot.focus { background: var(--focus); }
+.dot.social { background: var(--social); }
+.dot.outdoor { background: var(--outdoor); }
+.dot.cozy { background: var(--cozy); }
+
+#status-text {
+	font-size: 0.9rem;
+	color: #8a6170;
+}
+
+#map {
+	width: 100%;
+	height: min(62vh, 500px);
+	min-height: 340px;
+	border: 2px solid #e4a6b8;
+	border-radius: 12px;
+}
+
+.response-list {
+	display: grid;
+	gap: 0.6rem;
+}
+
+.response-item {
+	background: rgba(255, 255, 255, 0.8);
+	border: 1px solid #f1d8e1;
+	border-left: 4px solid var(--cozy);
+	border-radius: 8px;
+	padding: 0.7rem;
+}
+
+.response-item h3 {
+	font-size: 0.95rem;
+	color: #6f2142;
+	margin-bottom: 0.22rem;
+}
+
+.response-item p {
+	font-size: 0.9rem;
+	line-height: 1.45;
+	color: #6b4c53;
+}
+
+.meta {
+	font-size: 0.82rem;
+	margin-bottom: 0.3rem;
+	color: #8a6170;
+}
+
+.maplibregl-popup-content {
+	border-radius: 10px;
+	border: 1px solid var(--panel-line);
+	padding: 0;
+}
+
+.popup {
+	padding: 0.7rem;
+	min-width: 220px;
+}
+
+.popup h3 {
+	font-size: 0.95rem;
+	color: #6f2142;
+	margin-bottom: 0.3rem;
+}
+
+.popup p {
+	font-size: 0.88rem;
+	line-height: 1.4;
+	margin-bottom: 0.35rem;
+}

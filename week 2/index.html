@@ -4,10 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>my favorite matcha spots 🍵 ྀི⋆˚🍓࿔</title>
-	<link
-		href="https://unpkg.com/maplibre-gl@4.5.0/dist/maplibre-gl.css"
-		rel="stylesheet"
-	>
+	22./78
 	<style>
 		:root {
 			--bg-1: #ffe8f2;
@@ -185,14 +182,14 @@
 		}
 
 		.matcha-marker {
-			width: 20px;
-			height: 20px;
+			width: 24px;
+			height: 24px;
 			border-radius: 50%;
 			background:
 				radial-gradient(circle at 34% 34%, #ffeaf1 0 24%, transparent 25%),
 				linear-gradient(145deg, #86b06e, #5f8f55 42%, #eb98b8 100%);
-			border: 2px solid #fff3f7;
-			box-shadow: 0 0 0 2px rgba(91, 140, 79, 0.2), 0 5px 10px rgba(124, 31, 72, 0.2);
+			border: 3px solid #fff3f7;
+			box-shadow: 0 0 0 3px rgba(91, 140, 79, 0.2), 0 6px 12px rgba(124, 31, 72, 0.25);
 		}
 
 		.maplibregl-popup-content {
@@ -310,6 +307,7 @@
 		<section id="map" aria-label="Map of favorite matcha places"></section>
 	</main>
 
+	<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.5.0/dist/maplibre-gl.css" />
 	<script src="https://unpkg.com/maplibre-gl@4.5.0/dist/maplibre-gl.js"></script>
 	<script>
 		const map = new maplibregl.Map({
@@ -414,6 +412,7 @@
 		}
 
 		map.on("load", () => {
+			map.resize();
 			addFavoriteSpots(favoriteSpots);
 			showAllSpots();
 		});
