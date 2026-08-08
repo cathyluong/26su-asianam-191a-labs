@@ -24,7 +24,7 @@
 body {
 	min-height: 100vh;
 	color: var(--ink);
-	background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+	background: #f4ecdf;
 	padding: 1.25rem;
 }
 
