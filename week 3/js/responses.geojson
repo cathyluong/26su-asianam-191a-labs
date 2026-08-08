@@ -7,8 +7,8 @@
         "student": "Anonymous response 1",
         "location_name": "Los Angeles",
         "state": "California",
-        "impact_theme": "Emotional stress",
-        "summary": "After someone close to them was detained by ICE, this student said it became a lot harder to stay focused in school because they were carrying fear, grief, and stress at the same time.",
+        "impact_theme": "Emotional and psychological distress",
+        "summary": "My mom was deported, and I felt like I was constantly worrying about her. I had a hard time concentrating in class because I was always thinking about whether she was okay and when I would be able to see her again. Even now, whenever I hear about ICE, I get anxious because it reminds me of what happened.",
         "support_need": "Accessible mental health care and trusted community spaces"
       },
       "geometry": {
@@ -22,8 +22,8 @@
         "student": "Anonymous response 2",
         "location_name": "San Diego",
         "state": "California",
-        "impact_theme": "Family separation",
-        "summary": "This response shows how detention and deportation can suddenly change everything at home, especially when other relatives have to step in and take over caregiving or financial responsibilities.",
+        "impact_theme": "Family separation and changed relationships",
+        "summary": "My older brother was deported, and our relationship changed completely. We used to see each other all the time, but now most of our relationship happens through phone calls. I missed being able to spend holidays and important moments with him, and it has been difficult knowing that I can't just visit him whenever I want.",
         "support_need": "Family resource support and legal guidance"
       },
       "geometry": {
@@ -37,8 +37,8 @@
         "student": "Anonymous response 3",
         "location_name": "Las Vegas",
         "state": "Nevada",
-        "impact_theme": "Financial pressure",
-        "summary": "A loved one's removal created sudden financial pressure, and this response reflects how quickly housing costs, bills, and everyday expenses can become harder to manage.",
+        "impact_theme": "Financial strain and increased responsibilities",
+        "summary": "My partner was deported, and it put a lot of financial pressure on both of us. We had shared expenses, and suddenly I had to take on more of them while also trying to stay focused on school. I started working more hours, which left me with less time for studying and made college much harder to manage.",
         "support_need": "Emergency aid and long-term financial support"
       },
       "geometry": {
@@ -52,8 +52,8 @@
         "student": "Anonymous response 4",
         "location_name": "Daly City",
         "state": "California",
-        "impact_theme": "Limited support",
-        "summary": "This student pointed out how hard it can be to find campus support that really understands immigration-related grief, family separation, and how those things can affect school life.",
+        "impact_theme": "Disruption to education and everyday life",
+        "summary": "After my relative was deported, my responsibilities at home changed a lot. I had to help my family with things that they had previously handled, and it became harder to keep up with school. There were days when I wanted to focus on classes but couldn't because I was worried about what was happening with my family. My everyday routine felt completely different afterward.",
         "support_need": "Culturally informed campus support services"
       },
       "geometry": {
@@ -67,8 +67,8 @@
         "student": "Anonymous response 5",
         "location_name": "Honolulu",
         "state": "Hawaii",
-        "impact_theme": "Silence and stigma",
-        "summary": "Fear and stigma around detention and deportation made it hard for this family to talk openly about what happened, which made the student feel even more isolated and alone.",
+        "impact_theme": "Fear, stigma, and isolation",
+        "summary": "After my friend's deportation, I became much more hesitant to talk about immigration with other people. I was worried that people would make assumptions about them or about my family, so I started keeping more things to myself. I also became more aware of how easily immigration status can become something people judge you for. It was isolating because I didn't feel comfortable explaining why the deportation affected me so much.",
         "support_need": "Community spaces that reduce stigma and encourage dialogue"
       },
       "geometry": {

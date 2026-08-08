@@ -1,8 +1,8 @@
 // Initialize the map
 const map = new maplibregl.Map({
-    container: 'map', // Matches <div id="map">
+    container: 'map', 
     style: 'https://api.maptiler.com/maps/019fd8ca-107b-7008-ad8a-d9dc87817db6/style.json?key=QKsb7BgF9sHOSThAVJyV',
-    center: [-118.4403, 34.0728], // UCLA
+    center: [-118.4403, 34.0728], 
     zoom: 12
 
 });

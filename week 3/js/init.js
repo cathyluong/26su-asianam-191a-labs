@@ -1,6 +1,6 @@
 const map = new maplibregl.Map({
 	container: 'map',
-	style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
+	style: 'https://api.maptiler.com/maps/019fd983-f457-7dba-97c5-07a8dc637a2e/style.json?key=domjvUPbX2qSlWXv88Xn',
 	center: [-118.2437, 34.0522],
 	zoom: 4
 });
@@ -8,12 +8,16 @@ const map = new maplibregl.Map({
 map.addControl(new maplibregl.NavigationControl(), 'top-right');
 
 const themeColors = {
-	'Emotional stress': '#d87093',
-	'Family separation': '#f29f67',
-	'Financial pressure': '#e2c14f',
-	'Limited support': '#7fa866',
-	'Silence and stigma': '#8f7bc7'
+	'Emotional and psychological distress': '#d87093',
+	'Family separation and changed relationships': '#f29f67',
+	'Financial strain and increased responsibilities': '#e2c14f',
+	'Disruption to education and everyday life': '#7fa866',
+	'Fear, stigma, and isolation': '#8f7bc7'
 };
+
+function getImpactTheme(properties) {
+	return properties.impact_theme || properties.Impact_theme || 'Unknown impact';
+}
 
 function hexToRgba(hexColor, alpha) {
 	const normalized = hexColor.replace('#', '');
@@ -25,11 +29,13 @@ function hexToRgba(hexColor, alpha) {
 }
 
 function buildPopupContent(properties) {
+	const impactTheme = getImpactTheme(properties);
+
 	return `
 		<div class="popup-card">
 			<h3>${properties.student}</h3>
 			<p class="popup-location">${properties.location_name}, ${properties.state}</p>
-			<p><strong>Theme:</strong> ${properties.impact_theme}</p>
+			<p><strong>Aftermath:</strong> ${impactTheme}</p>
 			<p>${properties.summary}</p>
 		</div>
 	`;
@@ -42,7 +48,8 @@ function addResponsesToPage(features) {
 		const feature = features[index];
 		const { properties } = feature;
 		const card = document.createElement('details');
-		const tagColor = themeColors[properties.impact_theme] || '#d87093';
+		const impactTheme = getImpactTheme(properties);
+		const tagColor = themeColors[impactTheme] || '#d87093';
 		const softTagColor = hexToRgba(tagColor, 0.14);
 
 		card.className = 'response-item';
@@ -51,7 +58,7 @@ function addResponsesToPage(features) {
 			<summary class="response-summary">
 				<div class="response-topline">
 					<h3>${properties.student}</h3>
-					<span class="response-tag" style="background:${softTagColor}; color:${tagColor}">${properties.impact_theme}</span>
+					<span class="response-tag" style="background:${softTagColor}; color:${tagColor}">${impactTheme}</span>
 				</div>
 				<p class="response-meta">${properties.location_name}, ${properties.state}</p>
 			</summary>
@@ -71,13 +78,14 @@ function addPointsToMap(geojson) {
 		const feature = geojson.features[index];
 		const { coordinates } = feature.geometry;
 		const { properties } = feature;
+		const impactTheme = getImpactTheme(properties);
 		const markerElement = document.createElement('div');
 
 		markerElement.className = 'legend-swatch';
 		markerElement.style.width = '1rem';
 		markerElement.style.height = '1rem';
 		markerElement.style.boxShadow = '0 0 0 2px rgba(255,255,255,0.85)';
-		markerElement.style.background = themeColors[properties.impact_theme] || '#d87093';
+		markerElement.style.background = themeColors[impactTheme] || '#d87093';
 
 		const popup = new maplibregl.Popup({ offset: 18 }).setHTML(buildPopupContent(properties));
 
@@ -98,6 +106,3 @@ fetch('./js/responses.geojson')
 		addPointsToMap(geojson);
 		addResponsesToPage(geojson.features);
 	})
-	.catch((error) => {
-		console.error('Unable to load GeoJSON data:', error);
-	});
